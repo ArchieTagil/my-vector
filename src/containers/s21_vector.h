@@ -22,4 +22,23 @@ namespace s21 {
             size_type size;
             size_type capacity;
     };
+
+    template <typename T> //default contructor
+    inline vector<T>::vector(): data(nullptr), size(0), capacity(0) {}
+
+    template <typename T> //constructor with size and initializated by zero
+    inline vector<T>::vector(size_type n) {
+        data = new value_type[n]();
+        if (data == nullptr) std::__throw_bad_alloc();
+        size = n;
+        capacity = n;
+    }
+
+    template <typename T>
+    inline vector<T>::vector(std::initializer_list<value_type> const &items) {
+        data = new value_type[items.size()];
+        size = items.size();
+        capacity = items.size();
+    }
+
 }
