@@ -1,3 +1,6 @@
+#ifndef S21_VECTOR_H
+#define S21_VECTOR_H
+
 namespace s21 {
     template<typename T>
     class vector {
@@ -10,12 +13,15 @@ namespace s21 {
             typedef size_t size_type; //size_t defines the type of the container size (standard type is size_t)
 
             vector(); //default constructor, creates empty vector
-            vector(size_type n); //parameterized constructor, creates the vector of size n
-            vector(std::initializer_list<value_type> const &items); //initializer list constructor, creates vector initizialized using std::initializer_list
+            explicit vector(size_type n); //parameterized constructor, creates the vector of size n
+            explicit vector(std::initializer_list<value_type> const &items); //initializer list constructor, creates vector initizialized using std::initializer_list
             vector(const vector &v); //copy constructor
             vector(vector &&v); //move constructor
             ~vector(); //destructor
-            // operator=(vector &&v); //assignment operator overload for moving object
+            vector<value_type>& operator=(vector<value_type> &&v) {
+                std::cout << "\033[1;103m called assignment operator \033[0m \n";
+                return v;
+            };
 
             //getters block
             value_type *get_data() {
@@ -73,11 +79,26 @@ namespace s21 {
 
     template <typename T> //move constructor
     inline vector<T>::vector(vector &&v) {
-        std::move(v);
+        std::cout << "\033[1;103m called move constructor \033[0m \n";  //String for deubug, need to delete
+        this->data = v.data;
+        this->size = v.size;
+        this->capacity = v.capacity;
+        v.data = nullptr;
+        v.size = 0;
+        v.capacity = 0;
     }
+
+    // template <typename T>
+    // inline vector<T>& vector<T>::operator=(vector &&v) {
+    //     std::cout << "\033[1;93m called assignment constructor \033[0m \n";
+    // }
 
     template <typename T>
     inline vector<T>::~vector() {
-
+        delete[] data;
+        this->size = 0;
+        this->capacity = 0;
     }
 }
+
+#endif
