@@ -18,10 +18,7 @@ namespace s21 {
             vector(const vector &v); //copy constructor
             vector(vector &&v); //move constructor
             ~vector(); //destructor
-            vector<value_type>& operator=(vector<value_type> &&v) {
-                std::cout << "\033[1;103m called assignment operator \033[0m \n";
-                return v;
-            };
+            vector<value_type>& operator=(vector<value_type> &&v);
 
             //getters block
             value_type *get_data() {
@@ -88,10 +85,17 @@ namespace s21 {
         v.capacity = 0;
     }
 
-    // template <typename T>
-    // inline vector<T>& vector<T>::operator=(vector &&v) {
-    //     std::cout << "\033[1;93m called assignment constructor \033[0m \n";
-    // }
+    template <typename T>
+    inline vector<T>& vector<T>::operator=(vector &&v) {
+        std::cout << "\033[1;103m called assignment constructor \033[0m \n";
+        data = v.data;
+        capacity = v.capacity;
+        size = v.size;
+        v.data = nullptr;
+        v.capacity = 0;
+        v.size = 0;
+        return *this;
+    }
 
     template <typename T>
     inline vector<T>::~vector() {
