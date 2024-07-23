@@ -65,3 +65,96 @@ TEST(ConstructorTest, assignment_constructor_test1) {
         EXPECT_TRUE(*(test_vector2.get_data() + i) == i + 1);
     }
 }
+
+TEST(ConstructorTest, reserve_test1) {
+    s21::vector<int> test_vector{1,2,3,4,5,6,7,8};
+    EXPECT_TRUE(test_vector.get_size() == 8);
+    EXPECT_TRUE(test_vector.get_capacity() == 8);
+    test_vector.reserve(50);
+    EXPECT_TRUE(test_vector.get_size() == 8);
+    EXPECT_TRUE(test_vector.get_capacity() == 50);
+    for (size_t i = 0; i < test_vector.get_size(); i++) {
+        EXPECT_TRUE(*(test_vector.get_data() + i) == (int) i + 1);
+    }
+}
+
+TEST(ConstructorTest, shrink_to_fit_test1) {
+    s21::vector<int> test_vector{1,2,3,4,5,6,7,8};
+    EXPECT_TRUE(test_vector.get_size() == 8);
+    EXPECT_TRUE(test_vector.get_capacity() == 8);
+    test_vector.reserve(50);
+    EXPECT_TRUE(test_vector.get_size() == 8);
+    EXPECT_TRUE(test_vector.get_capacity() == 50);
+    for (size_t i = 0; i < test_vector.get_size(); i++) {
+        EXPECT_TRUE(*(test_vector.get_data() + i) == (int) i + 1);
+    }
+    test_vector.shrink_to_fit();
+    EXPECT_TRUE(test_vector.get_size() == 8);
+    EXPECT_TRUE(test_vector.get_capacity() == 8);
+}
+
+TEST(ConstructorTest, at_test1) {
+    s21::vector<int> test_vector{1,2,3,4,5,6,7,8};
+    EXPECT_TRUE(test_vector.at(0) == 1);
+}
+
+TEST(ConstructorTest, at_test2) {
+    s21::vector<int> test_vector{1,2,3,4,5,6,7,8};
+    EXPECT_TRUE(test_vector.at(7) == 8);
+}
+
+TEST(ConstructorTest, at_test3) {
+    s21::vector<int> test_vector{1,2,3,4,5,6,7,8};
+    EXPECT_TRUE(test_vector.at(3) == 4);
+}
+
+TEST(ConstructorTest, at_test4) {
+    s21::vector<int> test_vector{1,2,3,4,5,6,7,8};
+    EXPECT_THROW(test_vector.at(11), std::out_of_range);
+}
+
+TEST(ConstructorTest, at_test5) {
+    s21::vector<int> test_vector;
+    EXPECT_THROW(test_vector.at(0), std::out_of_range);
+}
+
+TEST(ConstructorTest, brackets_test1) {
+    s21::vector<int> test_vector{1,2,3,4,5,6,7,8};
+    EXPECT_TRUE(test_vector[0] == 1);
+}
+
+TEST(ConstructorTest, brackets_test2) {
+    s21::vector<int> test_vector{1,2,3,4,5,6,7,8};
+    EXPECT_TRUE(test_vector[7] == 8);
+}
+
+TEST(ConstructorTest, brackets_test3) {
+    s21::vector<int> test_vector{1,2,3,4,5,6,7,8};
+    EXPECT_TRUE(test_vector[3] == 4);
+}
+
+TEST(ConstructorTest, front_test1) {
+    s21::vector<int> test_vector{1,2,3,4,5,6,7,8};
+    std::vector<int> test_vector2{1,2,3,4,5,6,7,8};
+    EXPECT_TRUE(test_vector.front() == test_vector2.front());
+}
+
+TEST(ConstructorTest, back_test1) {
+    s21::vector<int> test_vector{1,2,3,4,5,6,7,8};
+    std::vector<int> test_vector2{1,2,3,4,5,6,7,8};
+    EXPECT_TRUE(test_vector.back() == test_vector2.back());
+}
+
+TEST(ConstructorTest, data_test1) {
+    s21::vector<int> test_vector{1,2,3,4,5,6,7,8};
+    EXPECT_TRUE(test_vector.data() == test_vector.get_data());
+}
+
+TEST(ConstructorTest, clear_test1) {
+    s21::vector<int> test_vector1{1,2,3,4,5,6,7,8};
+    std::vector<int> test_vector2{1,2,3,4,5,6,7,8};
+    test_vector1.clear();
+    test_vector2.clear();
+    EXPECT_TRUE(test_vector1.size() == test_vector2.size());
+    EXPECT_TRUE(test_vector1.capacity() == test_vector2.capacity());
+}
