@@ -59,6 +59,11 @@ namespace s21 {
             void pop_back();
             void swap(vector& other);
             //end of table modifiers
+            iterator begin();
+            iterator end();
+            //table iterators
+
+            //end table iterators
     
         private:
             value_type *data_;
@@ -212,27 +217,50 @@ namespace s21 {
 
     template <typename T>
     inline typename vector<T>::iterator vector<T>::insert(iterator pos, const_reference value) {
-
+        //TO DO
     }
 
     template <typename T>
     inline void vector<T>::erase(iterator pos) {
-
+        // std::cout << "pos is: " << pos << std::endl;
+        // std::cout << "begin is: " << this->begin() << std::endl;
+        // std::cout << "begin + pos is: " << this->begin() + *pos << std::endl;
+        if (pos - this->begin() < 0 || this->end() - pos < 0) {
+            throw std::out_of_range("iterator index is out of bounds");
+        } else {
+            while (pos < this->end() + 1) {
+                // std::cout << *pos << std::endl;
+                *pos = *(pos + 1);
+                pos++;
+            }
+            this->size_--;
+        }
+        //TO DO
     }
 
     template <typename T>
     inline void vector<T>::push_back(const_reference value) {
-
+        //TO DO
     }
 
     template <typename T>
     inline void vector<T>::pop_back() {
-
+        //TO DO
     }
 
     template <typename T>
     inline void vector<T>::swap(vector& other) {
+        //TO DO
+    }
 
+    template <typename T>
+    inline typename vector<T>::iterator vector<T>::begin() {
+        return this->data_;
+    }
+
+    template <typename T>
+    inline typename vector<T>::iterator vector<T>::end() {
+        return this->data_ + this->size_ - 1;
     }
 }
 
