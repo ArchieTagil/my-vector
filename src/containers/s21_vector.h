@@ -59,10 +59,10 @@ namespace s21 {
             void pop_back();
             void swap(vector& other);
             //end of table modifiers
+            
+            //table iterators
             iterator begin();
             iterator end();
-            //table iterators
-
             //end table iterators
     
         private:
@@ -72,13 +72,10 @@ namespace s21 {
     };
 
     template <typename T> //default contructor
-    inline vector<T>::vector(): data_(nullptr), size_(0), capacity_(0) {
-        std::cout << "\033[1;103m called default constructor \033[0m \n";  //String for deubug, need to delete
-    }
+    inline vector<T>::vector(): data_(nullptr), size_(0), capacity_(0) {}
 
     template <typename T> //constructor with size and initializated by zero
     inline vector<T>::vector(size_type n) {
-        std::cout << "\033[1;103m called constructor with size \033[0m \n";  //String for deubug, need to delete
         data_ = new value_type[n]();
         if (data_ == nullptr) std::__throw_bad_alloc();
         size_ = n;
@@ -87,7 +84,6 @@ namespace s21 {
 
     template <typename T> //constructor from initializer list
     inline vector<T>::vector(std::initializer_list<value_type> const &items) {
-        std::cout << "\033[1;103m called constructor with initializer_list \033[0m \n"; //String for deubug, need to delete
         data_ = new value_type[items.size()];
         size_ = items.size();
         capacity_ = items.size();
@@ -98,7 +94,6 @@ namespace s21 {
 
     template <typename T> //copy constructor
     inline vector<T>::vector(const vector &v): size_(v.size_), capacity_(v.capacity_) {
-        std::cout << "\033[1;103m called copy constructor \033[0m \n";  //String for deubug, need to delete
         this->data_ = new value_type[v.size_];
         for (size_t i = 0; i < v.size_; i++) {
             this->data_[i] = v.data_[i];
@@ -107,7 +102,6 @@ namespace s21 {
 
     template <typename T> //move constructor
     inline vector<T>::vector(vector &&v) {
-        std::cout << "\033[1;103m called move constructor \033[0m \n";  //String for deubug, need to delete
         this->data_ = v.data_;
         this->size_ = v.size_;
         this->capacity_ = v.capacity_;
@@ -118,7 +112,6 @@ namespace s21 {
 
     template <typename T>
     inline vector<T>& vector<T>::operator=(vector &&v) {
-        std::cout << "\033[1;103m called assignment constructor \033[0m \n";
         data_ = v.data_;
         capacity_ = v.capacity_;
         size_ = v.size_;
@@ -137,7 +130,7 @@ namespace s21 {
 
     template <typename T>
     inline bool vector<T>::empty() {
-        return false;
+        return this->size_ == 0;
     }
 
     template <typename T>
@@ -217,40 +210,58 @@ namespace s21 {
 
     template <typename T>
     inline typename vector<T>::iterator vector<T>::insert(iterator pos, const_reference value) {
-        //TO DO
+        int pos_index = pos - this->begin();
+        if (pos - this->begin() < 0 || this->end() - pos < 0) {
+            throw std::out_of_range("iterator index is out of bounds");
+        } else {
+            if (capacity_ <= size_) {
+                this->reserve(size_ * 2);
+            }
+            for (int i = size_; i >= 0; i--) {
+                if (i >= pos_index) this->data_[i + 1] = this->data_[i];
+            }
+            size_++;
+        }
+        this->data_[pos_index] = value;
+        return &this->data_[pos_index];
     }
 
     template <typename T>
     inline void vector<T>::erase(iterator pos) {
-        // std::cout << "pos is: " << pos << std::endl;
-        // std::cout << "begin is: " << this->begin() << std::endl;
-        // std::cout << "begin + pos is: " << this->begin() + *pos << std::endl;
-        if (pos - this->begin() < 0 || this->end() - pos < 0) {
+        if (pos - this->begin() < 0 || this->end() - pos - 1 < 0) {
             throw std::out_of_range("iterator index is out of bounds");
         } else {
-            while (pos < this->end() + 1) {
-                // std::cout << *pos << std::endl;
+            while (pos < this->end() - 1) {
                 *pos = *(pos + 1);
                 pos++;
             }
-            this->size_--;
+            this->size_ -= 1;
         }
-        //TO DO
     }
 
     template <typename T>
     inline void vector<T>::push_back(const_reference value) {
-        //TO DO
+        this->insert(this->end(), value);
     }
 
     template <typename T>
     inline void vector<T>::pop_back() {
-        //TO DO
+        this->erase(this->end() - 1);
     }
 
     template <typename T>
     inline void vector<T>::swap(vector& other) {
-        //TO DO
+        T *tmp_data = this->data_;
+        size_type tmp_size = this->size_;
+        size_type tmp_capacity = this->capacity_; 
+
+        this->data_ = other.data_;
+        this->size_ = other.size_;
+        this->capacity_ = other.capacity_;
+
+        other.data_ = tmp_data;
+        other.size_ = tmp_size;
+        other.capacity_ = tmp_capacity;
     }
 
     template <typename T>
@@ -260,7 +271,7 @@ namespace s21 {
 
     template <typename T>
     inline typename vector<T>::iterator vector<T>::end() {
-        return this->data_ + this->size_ - 1;
+        return this->data_ + this->size_;
     }
 }
 
